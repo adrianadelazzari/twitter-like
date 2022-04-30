@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "message", consumes = { "application/json" }, produces = { "application/json" })
+@RequestMapping(value = "message")
 @Tag(name = "message", description = "Message API")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successful operation"),

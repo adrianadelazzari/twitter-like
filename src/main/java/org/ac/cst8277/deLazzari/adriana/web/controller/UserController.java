@@ -1,23 +1,30 @@
 package org.ac.cst8277.deLazzari.adriana.web.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.ac.cst8277.deLazzari.adriana.domain.entity.UserEntity;
 import org.ac.cst8277.deLazzari.adriana.domain.valueObject.ProfileVO;
 import org.ac.cst8277.deLazzari.adriana.domain.valueObject.UserVO;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.ac.cst8277.deLazzari.adriana.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "user", consumes = { "application/json" }, produces = { "application/json" })
+@RequestMapping(value = "user")
 @Tag(name = "user", description = "User API")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successful operation"),
         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(examples = {})) })
+@RequiredArgsConstructor
 public class UserController {
+
+    private final UserService userService;
 
     @GetMapping("/producers")
     public List<UserVO> getProducers() {
@@ -44,8 +51,15 @@ public class UserController {
 
     @GetMapping("/producers/all")
     public List<UserVO> getAllProducers(){
-        UserVO temp = new UserVO();
-        return Collections.singletonList(temp);
+
+        List<UserEntity> userEntityList = this.userService.findAllProducers();
+        List<UserVO> userVOList = new ArrayList<>();
+        userEntityList.forEach(userEntity -> {
+            UserVO userVO = new UserVO();
+            userVO.setUsername(userEntity.getUsername());
+            userVOList.add(userVO);
+        });
+        return userVOList;
     }
 
     @GetMapping("/subscribers")

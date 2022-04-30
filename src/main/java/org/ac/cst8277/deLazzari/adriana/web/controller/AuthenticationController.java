@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "authentication", consumes = { "application/json" }, produces = { "application/json" })
+@RequestMapping(value = "authentication")
 @Tag(name = "authentication", description = "Authentication API")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successful operation")})
