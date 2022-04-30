@@ -67,9 +67,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public void logout(@RequestBody TokenVO tokenVO){
+    public void logout(@SessionAttribute("userEntity") UserEntity userEntity){
         try {
-            SessionEntity sessionEntity = this.sessionService.findFirstByUuiIdOrderByIdDesc(tokenVO.getToken());
+            SessionEntity sessionEntity = this.sessionService.findFirstByUuiIdOrderByIdDesc(userEntity.getUuid());
             sessionEntity.setLogout(Instant.now());
             this.sessionService.save(sessionEntity);
         } catch (Exception e) {
