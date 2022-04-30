@@ -13,10 +13,10 @@ public class ProfileService {
 
     public ProfileEntity save(ProfileEntity profileEntity){
 
-        return null;
+        return this.profileRepository.save(profileEntity);
     }
     public ProfileEntity findByUserId(Integer userId){
 
-        return null;
+        return this.profileRepository.findByUserId(userId);
     }
 }

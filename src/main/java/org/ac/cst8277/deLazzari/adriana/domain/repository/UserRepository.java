@@ -16,7 +16,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     Optional<UserEntity> findByUuid(String uuid);
 
     @Query(
-            value = "SELECT u.* FROM USER u JOIN PRODUCER_SUBSCRIBER ps ON u.id = ps.producer_id ",
+            value = "SELECT u.* FROM USER u JOIN USER_ROLE ur ON u.id = ur.user_id " +
+                    "WHERE ur.role_id = 1",
             nativeQuery = true)
     List<UserEntity> findAllProducers();
 }
