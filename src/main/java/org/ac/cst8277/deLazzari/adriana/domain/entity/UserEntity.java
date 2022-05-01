@@ -3,6 +3,7 @@ package org.ac.cst8277.deLazzari.adriana.domain.entity;
 import java.time.Instant;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,7 +28,7 @@ public class UserEntity {
   @CreationTimestamp
   private Instant created;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "user_role",
       joinColumns = @JoinColumn(name = "user_id"),
@@ -35,7 +36,7 @@ public class UserEntity {
   )
   private List<RoleEntity> roleList;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "producer_subscriber",
       joinColumns = @JoinColumn(name = "producer_id"),
@@ -43,7 +44,7 @@ public class UserEntity {
   )
   private List<UserEntity> producerList;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "producer_subscriber",
       joinColumns = @JoinColumn(name = "subscriber_id"),

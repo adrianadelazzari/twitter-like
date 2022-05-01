@@ -31,7 +31,6 @@ public class UserService {
   }
 
   public UserEntity findById(Integer userId) throws TwitterLikeException {
-
     return this.userRepository.findById(userId)
         .orElseThrow(() -> new TwitterLikeException("user not found."));
   }

@@ -4,10 +4,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.ac.cst8277.deLazzari.adriana.domain.entity.RoleEntity;
 import org.ac.cst8277.deLazzari.adriana.domain.entity.SessionEntity;
 import org.ac.cst8277.deLazzari.adriana.domain.entity.UserEntity;
+import org.ac.cst8277.deLazzari.adriana.domain.enumerator.RoleEnum;
 import org.ac.cst8277.deLazzari.adriana.domain.valueObject.LoginVO;
 import org.ac.cst8277.deLazzari.adriana.domain.valueObject.TokenVO;
 import org.ac.cst8277.deLazzari.adriana.domain.valueObject.UserRegisterVO;
@@ -43,6 +47,12 @@ public class AuthenticationController {
       userEntity.setEmail(userRegisterVO.getEmail());
       userEntity.setPassword(userRegisterVO.getPassword());
       userEntity.setUuid(UUID.randomUUID().toString());
+
+      RoleEntity roleEntity = new RoleEntity();
+      roleEntity.setId(RoleEnum.SUBSCRIBER.getId());
+      List<RoleEntity> roleEntityList = new ArrayList<>();
+      roleEntityList.add(roleEntity);
+      userEntity.setRoleList(roleEntityList);
 
       this.userManagementService.createUser(userEntity);
     } catch (Exception e) {

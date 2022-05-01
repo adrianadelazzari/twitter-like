@@ -9,8 +9,10 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.ac.cst8277.deLazzari.adriana.domain.entity.ProfileEntity;
 import org.ac.cst8277.deLazzari.adriana.domain.entity.UserEntity;
+import org.ac.cst8277.deLazzari.adriana.domain.enumerator.RoleEnum;
 import org.ac.cst8277.deLazzari.adriana.domain.valueObject.ProfileVO;
 import org.ac.cst8277.deLazzari.adriana.domain.valueObject.UserVO;
+import org.ac.cst8277.deLazzari.adriana.exception.TwitterLikeException;
 import org.ac.cst8277.deLazzari.adriana.service.ProfileService;
 import org.ac.cst8277.deLazzari.adriana.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -51,12 +53,22 @@ public class UserController {
   @PostMapping("/subscribe")
   public void subscribe(@RequestAttribute("userEntity") UserEntity userEntity,
       @RequestBody int userId) {
+    if (userEntity.getId().equals(userId)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot subscribe to itself.");
+    }
     try {
       UserEntity userEntity1 = this.userService.findById(userId);
-      List<UserEntity> userEntityList = userEntity.getProducerList();
-      userEntityList.add(userEntity1);
-      this.userService.save(userEntity);
-    } catch (Exception e) {
+      boolean isProducer = userEntity1.getRoleList().stream()
+          .anyMatch(roleEntity -> RoleEnum.PRODUCER.getId().equals(roleEntity.getId()));
+      if (isProducer) {
+        List<UserEntity> userEntityList = userEntity.getProducerList();
+        userEntityList.add(userEntity1);
+        this.userService.save(userEntity);
+      } else {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            "Cannot subscribe to non producer.");
+      }
+    } catch (TwitterLikeException e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -77,7 +89,6 @@ public class UserController {
       profileEntity = new ProfileEntity();
       profileEntity.setUserId(userEntity.getId());
     }
-
     profileEntity.setName(profileVO.getName());
     profileEntity.setLocation(profileVO.getLocation());
     profileEntity.setDateOfBirth(profileVO.getDateOfBirth());
