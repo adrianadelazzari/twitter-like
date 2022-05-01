@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageReplyService {
 
-    private final MessageReplyRepository messageReplyRepository;
+  private final MessageReplyRepository messageReplyRepository;
 
-    public MessageReplyEntity save(MessageReplyEntity messageReplyEntity){
+  public MessageReplyEntity save(MessageReplyEntity messageReplyEntity) {
 
-        return null;
-    }
-    public Boolean deleteById(Integer messageReplyId){
-        return true;
-    }
+    return null;
+  }
+
+  public Boolean deleteById(Integer messageReplyId) {
+    return true;
+  }
 }

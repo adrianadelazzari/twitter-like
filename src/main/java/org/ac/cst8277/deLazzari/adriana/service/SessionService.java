@@ -9,14 +9,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class SessionService {
 
-    private final SessionRepository sessionRepository;
+  private final SessionRepository sessionRepository;
 
-    public SessionEntity save(SessionEntity sessionEntity){
+  public SessionEntity save(SessionEntity sessionEntity) {
 
-        return this.sessionRepository.save(sessionEntity);
-    }
-    public SessionEntity findFirstByUuiIdOrderByIdDesc(String uuid){
+    return this.sessionRepository.save(sessionEntity);
+  }
 
-        return this.sessionRepository.findFirstByUuiIdOrderByIdDesc(uuid);
-    }
+  public SessionEntity findFirstByUuiIdOrderByIdDesc(String uuid) {
+
+    return this.sessionRepository.findFirstByUuiIdOrderByIdDesc(uuid);
+  }
 }

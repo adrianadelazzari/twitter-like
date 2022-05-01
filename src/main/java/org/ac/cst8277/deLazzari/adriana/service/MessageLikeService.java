@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageLikeService {
 
-    private final MessageLikeRepository messageLikeRepository;
+  private final MessageLikeRepository messageLikeRepository;
 
-    public void like(Integer messageId){
+  public void like(Integer messageId) {
 
-    }
-    public Boolean deleteById(Integer messageLikeId){
+  }
 
-        return true;
-    }
+  public Boolean deleteById(Integer messageLikeId) {
+
+    return true;
+  }
 }

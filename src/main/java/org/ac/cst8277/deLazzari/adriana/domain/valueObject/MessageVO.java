@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class MessageVO {
 
-    private Integer id;
-    private String content;
-    private Integer userId;
+  private Integer id;
+  private String content;
+  private Integer userId;
 }

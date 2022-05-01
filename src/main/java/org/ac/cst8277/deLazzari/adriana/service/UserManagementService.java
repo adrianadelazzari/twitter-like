@@ -9,14 +9,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserManagementService {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    public void createUser(UserEntity userEntity){
+  public void createUser(UserEntity userEntity) {
 
-        this.userService.save(userEntity);
-    }
-    public UserEntity findByEmailAndPassword(String email, String password) throws TwitterLikeException {
+    this.userService.save(userEntity);
+  }
 
-        return this.userService.findByEmailAndPassword(email, password);
-    }
+  public UserEntity findByEmailAndPassword(String email, String password)
+      throws TwitterLikeException {
+
+    return this.userService.findByEmailAndPassword(email, password);
+  }
 }

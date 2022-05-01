@@ -10,10 +10,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class InterceptorsConfig implements WebMvcConfigurer {
 
-    private final BearerTokenInterceptor bearerTokenInterceptor;
+  private final BearerTokenInterceptor bearerTokenInterceptor;
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(this.bearerTokenInterceptor);
-    }
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(this.bearerTokenInterceptor);
+  }
 }
