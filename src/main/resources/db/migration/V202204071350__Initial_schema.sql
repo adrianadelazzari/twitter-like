@@ -41,6 +41,7 @@ CREATE TABLE `user_role`
 CREATE TABLE `profile`
 (
     `user_id`       int NOT NULL,
+    `name`          varchar(100) DEFAULT NULL,
     `location`      varchar(100) DEFAULT NULL,
     `date_of_birth` date         DEFAULT NULL,
     PRIMARY KEY (`user_id`),
