@@ -12,11 +12,10 @@ public class MessageReplyService {
   private final MessageReplyRepository messageReplyRepository;
 
   public MessageReplyEntity save(MessageReplyEntity messageReplyEntity) {
-
-    return null;
+    return this.messageReplyRepository.save(messageReplyEntity);
   }
 
-  public Boolean deleteById(Integer messageReplyId) {
-    return true;
+  public void deleteById(Integer messageReplyId) {
+    this.messageReplyRepository.deleteById(messageReplyId);
   }
 }

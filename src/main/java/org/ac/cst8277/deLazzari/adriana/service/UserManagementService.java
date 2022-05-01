@@ -12,13 +12,11 @@ public class UserManagementService {
   private final UserService userService;
 
   public void createUser(UserEntity userEntity) {
-
     this.userService.save(userEntity);
   }
 
   public UserEntity findByEmailAndPassword(String email, String password)
       throws TwitterLikeException {
-
     return this.userService.findByEmailAndPassword(email, password);
   }
 }

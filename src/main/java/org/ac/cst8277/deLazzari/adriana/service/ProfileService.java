@@ -12,12 +12,10 @@ public class ProfileService {
   private final ProfileRepository profileRepository;
 
   public ProfileEntity save(ProfileEntity profileEntity) {
-
     return this.profileRepository.save(profileEntity);
   }
 
   public ProfileEntity findByUserId(Integer userId) {
-
     return this.profileRepository.findByUserId(userId);
   }
 }

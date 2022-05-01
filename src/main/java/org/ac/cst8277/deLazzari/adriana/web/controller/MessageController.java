@@ -4,10 +4,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.ac.cst8277.deLazzari.adriana.domain.entity.MessageEntity;
+import org.ac.cst8277.deLazzari.adriana.domain.entity.MessageReplyEntity;
 import org.ac.cst8277.deLazzari.adriana.domain.entity.UserEntity;
 import org.ac.cst8277.deLazzari.adriana.domain.valueObject.MessageVO;
+import org.ac.cst8277.deLazzari.adriana.service.MessageService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,18 +28,26 @@ import org.springframework.web.bind.annotation.RestController;
 @ApiResponses(value = {
     @ApiResponse(responseCode = "200", description = "Successful operation"),
     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(examples = {}))})
+@RequiredArgsConstructor
 public class MessageController {
+
+  private final MessageService messageService;
 
   @PostMapping("/")
   public void publish(@RequestAttribute("userEntity") UserEntity userEntity,
       @RequestBody MessageVO messageVO) {
-
+    MessageEntity messageEntity = new MessageEntity();
+    messageEntity.setContent(messageVO.getContent());
+    messageEntity.setDate(Instant.now());
+    messageEntity.setUserId(userEntity.getId());
+    this.messageService.save(messageEntity);
   }
 
   @PostMapping("/{messageId}/reply")
   public void reply(@RequestAttribute("userEntity") UserEntity userEntity,
       @RequestBody MessageVO messageVO, @PathVariable("messageId") Integer messageId) {
-    System.out.println(123);
+    MessageReplyEntity messageReplyEntity = new MessageReplyEntity();
+
   }
 
   @PostMapping("/like")
