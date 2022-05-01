@@ -18,6 +18,10 @@ public class MessageService {
     return this.messageRepository.save(messageEntity);
   }
 
+  public MessageEntity findById(Integer messageId) {
+    return this.messageRepository.findById(messageId).orElse(null);
+  }
+
   public void deleteById(Integer messageId) {
     this.messageRepository.deleteById(messageId);
   }

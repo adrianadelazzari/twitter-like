@@ -39,16 +39,16 @@ public class UserEntity {
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "producer_subscriber",
-      joinColumns = @JoinColumn(name = "producer_id"),
-      inverseJoinColumns = @JoinColumn(name = "subscriber_id")
+      joinColumns = @JoinColumn(name = "subscriber_id"),
+      inverseJoinColumns = @JoinColumn(name = "producer_id")
   )
   private List<UserEntity> producerList;
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
       name = "producer_subscriber",
-      joinColumns = @JoinColumn(name = "subscriber_id"),
-      inverseJoinColumns = @JoinColumn(name = "producer_id")
+      joinColumns = @JoinColumn(name = "producer_id"),
+      inverseJoinColumns = @JoinColumn(name = "subscriber_id")
   )
   private List<UserEntity> subscriberList;
 }

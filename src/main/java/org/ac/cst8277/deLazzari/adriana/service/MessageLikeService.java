@@ -14,11 +14,21 @@ public class MessageLikeService {
   private final MessageLikeRepository messageLikeRepository;
 
   public void like(Integer messageId, Integer userId) {
-    MessageLikeEntity messageLikeEntity = new MessageLikeEntity();
-    messageLikeEntity.setMessageId(messageId);
-    messageLikeEntity.setUserId(userId);
-    messageLikeEntity.setDate(Instant.now());
-    this.messageLikeRepository.save(messageLikeEntity);
+    MessageLikeId messageLikeId = new MessageLikeId();
+    messageLikeId.setMessageId(messageId);
+    messageLikeId.setUserId(userId);
+
+    MessageLikeEntity messageLikeEntity = this.messageLikeRepository.findById(messageLikeId).orElse(null);
+
+    if(messageLikeEntity == null){
+      messageLikeEntity = new MessageLikeEntity();
+      messageLikeEntity.setMessageId(messageId);
+      messageLikeEntity.setUserId(userId);
+      messageLikeEntity.setDate(Instant.now());
+      this.messageLikeRepository.save(messageLikeEntity);
+    } else{
+      this.deleteById(messageId, userId);
+    }
   }
 
   public void deleteById(Integer messageId, Integer userId) {
