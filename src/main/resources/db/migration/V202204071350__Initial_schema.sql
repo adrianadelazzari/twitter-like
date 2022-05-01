@@ -6,6 +6,8 @@ CREATE TABLE `user`
     `password` varchar(50)  NOT NULL,
     `uuid`     varchar(36)  NOT NULL,
     `created`  datetime     NOT NULL,
+    UNIQUE (`username`),
+    UNIQUE (`email`),
     PRIMARY KEY (`id`)
 );
 
