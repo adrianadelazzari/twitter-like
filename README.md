@@ -30,6 +30,9 @@ Update the following environment variables accordingly:
 
 - docker run -e "MYSQL_DB_CONNECTION_URL=jdbc:mysql://192.168.0.177:3306/twitter-like" -e "MYSQL_DB_USER=mysqldatabase" -e "MYSQL_DB_PASS:mysqldatabase" -p 8080:8080 twitter-like
 
+## How to access Swagger and test the application:
+
+- http://localhost:8080/swagger-ui/index.html#/
 
 
 
