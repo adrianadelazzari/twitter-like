@@ -21,15 +21,15 @@ public class BearerTokenInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
       Object handler) {
     try {
-      List<String> allowedUrls = new ArrayList<>();
-      allowedUrls.add("/authentication/register");
-      allowedUrls.add("/authentication/login");
-      allowedUrls.add("/swagger-ui/index.html");
-      allowedUrls.add("/v3/api-docs");
-      allowedUrls.add("/v3/api-docs/swagger-config");
+      List<String> publicUrls = new ArrayList<>();
+      publicUrls.add("/authentication/register");
+      publicUrls.add("/authentication/login");
+      publicUrls.add("/swagger-ui/");
+      publicUrls.add("/v3/api-docs");
+      publicUrls.add("/error");
 
       String servletPath = request.getServletPath();
-      if (!allowedUrls.contains(servletPath)) {
+      if (publicUrls.stream().filter(s -> servletPath.startsWith(s)).findAny().isEmpty()) {
         String authorizationHeader = request.getHeader("authorization");
         if (Objects.isNull(request.getAttribute("userEntity"))) {
           if (Objects.nonNull(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
