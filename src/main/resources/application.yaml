@@ -1,9 +1,9 @@
 spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/twitter-like
-    username: mysqldatabase
-    password: mysqldatabase
+    url: ${MYSQL_DB_CONNECTION_URL:jdbc:mysql://localhost:3306/twitter-like}
+    username: ${MYSQL_DB_USER:mysqldatabase}
+    password: ${MYSQL_DB_PASS:mysqldatabase}
   jpa:
     show-sql: true
     hibernate:
