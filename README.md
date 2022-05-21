@@ -1,5 +1,11 @@
 # Twitter-like
 
+This is a twitter-like application with OAuth2 and JWT.
+
+## Pre-setup:
+
+- Create MySQL database: twitter-like
+
 ## Environment variables
 
 Update the following environment variables accordingly:
@@ -20,11 +26,7 @@ Update the following environment variables accordingly:
 
 ### Run docker image:
 
-#### Linux:
-
-- docker run -p 8080:8080 twitter-like
-
-#### Windows:
+#### Linux and Windows:
 
 *replace variables values accordingly.
 
@@ -32,7 +34,11 @@ Update the following environment variables accordingly:
 
 ## How to access Swagger and test the application:
 
-- http://localhost:8080/swagger-ui/index.html#/
+1. Access Swagger page:
+   - http://localhost:8080/swagger-ui/index.html#/
+2. Authenticate with GitHub
+3. Get JWT token from /authentication/token endpoint in Swagger
+4. Use acquired token to authorize subsequent requests
 
 
 
