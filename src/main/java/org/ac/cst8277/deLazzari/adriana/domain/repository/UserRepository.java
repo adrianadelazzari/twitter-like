@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
-  Optional<UserEntity> findByEmailAndPassword(String email, String password);
-
-  Optional<UserEntity> findByUuid(String uuid);
+  Optional<UserEntity> findByUsername(String username);
 
   @Query(
       value = "SELECT u.* FROM USER u JOIN USER_ROLE ur ON u.id = ur.user_id " +

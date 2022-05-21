@@ -17,14 +17,9 @@ public class UserService {
     return this.userRepository.save(userEntity);
   }
 
-  public UserEntity findByEmailAndPassword(String email, String password)
+  public UserEntity findByUsername(String username)
       throws TwitterLikeException {
-    return this.userRepository.findByEmailAndPassword(email, password)
-        .orElseThrow(() -> new TwitterLikeException("user not found."));
-  }
-
-  public UserEntity findByUuid(String uuid) throws TwitterLikeException {
-    return this.userRepository.findByUuid(uuid)
+    return this.userRepository.findByUsername(username)
         .orElseThrow(() -> new TwitterLikeException("user not found."));
   }
 

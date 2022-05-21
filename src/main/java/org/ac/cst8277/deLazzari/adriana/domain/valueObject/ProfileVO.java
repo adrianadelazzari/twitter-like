@@ -9,5 +9,6 @@ public class ProfileVO {
   private String location;
   private Date dateOfBirth;
   private String name;
+  private String email;
 
 }

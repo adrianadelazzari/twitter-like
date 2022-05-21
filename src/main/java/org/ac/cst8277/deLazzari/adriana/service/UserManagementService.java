@@ -15,8 +15,8 @@ public class UserManagementService {
     this.userService.save(userEntity);
   }
 
-  public UserEntity findByEmailAndPassword(String email, String password)
+  public UserEntity findByUsername(String username)
       throws TwitterLikeException {
-    return this.userService.findByEmailAndPassword(email, password);
+    return this.userService.findByUsername(username);
   }
 }

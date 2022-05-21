@@ -92,6 +92,7 @@ public class UserController {
     profileEntity.setName(profileVO.getName());
     profileEntity.setLocation(profileVO.getLocation());
     profileEntity.setDateOfBirth(profileVO.getDateOfBirth());
+    profileEntity.setEmail(profileVO.getEmail());
     this.profileService.save(profileEntity);
   }
 
@@ -135,6 +136,7 @@ public class UserController {
       profileVO.setName(profileEntity.getName());
       profileVO.setLocation(profileEntity.getLocation());
       profileVO.setDateOfBirth(profileEntity.getDateOfBirth());
+      profileVO.setEmail(profileEntity.getEmail());
     }
     return profileVO;
   }

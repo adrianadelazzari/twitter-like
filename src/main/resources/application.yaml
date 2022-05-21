@@ -16,5 +16,8 @@ spring:
             clientId: 423590fe05632325d871
             clientSecret: 4507f6aa70e118c63b58b51c4f4cdc868916ef53
 
+jwt:
+  secret: cst8277
+
 server:
   port: 8080

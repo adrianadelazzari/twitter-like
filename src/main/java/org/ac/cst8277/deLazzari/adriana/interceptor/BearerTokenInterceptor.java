@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.ac.cst8277.deLazzari.adriana.domain.entity.UserEntity;
 import org.ac.cst8277.deLazzari.adriana.service.UserService;
+import org.ac.cst8277.deLazzari.adriana.util.JwtTokenUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -16,32 +17,35 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class BearerTokenInterceptor implements HandlerInterceptor {
 
   private final UserService userService;
+  private final JwtTokenUtil jwtTokenUtil;
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
       Object handler) {
     try {
       List<String> publicUrls = new ArrayList<>();
-      publicUrls.add("/authentication/register");
-      publicUrls.add("/authentication/login");
+      publicUrls.add("/authentication/token");
       publicUrls.add("/swagger-ui/");
       publicUrls.add("/v3/api-docs");
       publicUrls.add("/error");
 
       String servletPath = request.getServletPath();
       if (publicUrls.stream().filter(s -> servletPath.startsWith(s)).findAny().isEmpty()) {
-        String authorizationHeader = request.getHeader("authorization");
-        if (Objects.isNull(request.getAttribute("userEntity"))) {
-          if (Objects.nonNull(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
-            authorizationHeader = authorizationHeader.substring(7);
-            UserEntity userEntity = this.userService.findByUuid(authorizationHeader);
-            request.setAttribute("userEntity", userEntity);
-          } else {
+        String jwtToken = request.getHeader("authorization");
+        if (Objects.nonNull(jwtToken) && jwtToken.startsWith("Bearer ")) {
+          jwtToken = jwtToken.substring(7);
+          String username = this.jwtTokenUtil.getUsernameFromToken(jwtToken);
+          UserEntity userEntity = this.userService.findByUsername(username);
+          if (!this.jwtTokenUtil.validateToken(jwtToken, userEntity.getUsername())) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
           }
+          request.setAttribute("userEntity", userEntity);
+          return true;
+        } else {
+          response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+          return false;
         }
-        return true;
       }
       return HandlerInterceptor.super.preHandle(request, response, handler);
     } catch (Exception e) {

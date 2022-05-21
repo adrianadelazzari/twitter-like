@@ -1,29 +1,25 @@
 package org.ac.cst8277.deLazzari.adriana.web.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.ac.cst8277.deLazzari.adriana.domain.entity.RoleEntity;
-import org.ac.cst8277.deLazzari.adriana.domain.entity.SessionEntity;
 import org.ac.cst8277.deLazzari.adriana.domain.entity.UserEntity;
 import org.ac.cst8277.deLazzari.adriana.domain.enumerator.RoleEnum;
-import org.ac.cst8277.deLazzari.adriana.domain.valueObject.LoginVO;
 import org.ac.cst8277.deLazzari.adriana.domain.valueObject.TokenVO;
-import org.ac.cst8277.deLazzari.adriana.domain.valueObject.UserRegisterVO;
-import org.ac.cst8277.deLazzari.adriana.service.SessionService;
+import org.ac.cst8277.deLazzari.adriana.exception.TwitterLikeException;
 import org.ac.cst8277.deLazzari.adriana.service.UserManagementService;
+import org.ac.cst8277.deLazzari.adriana.util.JwtTokenUtil;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -35,59 +31,48 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthenticationController {
 
   private final UserManagementService userManagementService;
-  private final SessionService sessionService;
+  private final JwtTokenUtil jwtTokenUtil;
 
-  //@Operation(summary = "Find Contacts by name", description = "Name search by %name% format")
-  @PostMapping("/register")
-  public void register(@RequestBody UserRegisterVO userRegisterVO) {
-
+  @GetMapping("/token")
+  public TokenVO getToken(
+      @Parameter(hidden = true) @AuthenticationPrincipal OAuth2User principal) {
     try {
-      UserEntity userEntity = new UserEntity();
-      userEntity.setUsername(userRegisterVO.getUsername());
-      userEntity.setEmail(userRegisterVO.getEmail());
-      userEntity.setPassword(userRegisterVO.getPassword());
-      userEntity.setUuid(UUID.randomUUID().toString());
+      String login = principal.getAttribute("login");
+      if (login == null || "".equals(login)) {
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+      }
 
-      RoleEntity roleEntity = new RoleEntity();
-      roleEntity.setId(RoleEnum.SUBSCRIBER.getId());
-      List<RoleEntity> roleEntityList = new ArrayList<>();
-      roleEntityList.add(roleEntity);
-      userEntity.setRoleList(roleEntityList);
+      UserEntity userEntity = null;
+      try {
+        userEntity = this.userManagementService.findByUsername(
+            login);
+      } catch (TwitterLikeException t) {
+        // No need to propagate if user doesn't exist.
+      }
 
-      this.userManagementService.createUser(userEntity);
-    } catch (Exception e) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-    }
-  }
+      if (userEntity == null) {
+        // Create and save
+        userEntity = new UserEntity();
+        userEntity.setUsername(login);
 
-  @PostMapping("/login")
-  public TokenVO login(@RequestBody LoginVO loginVO) {
-    try {
-      UserEntity userEntity = this.userManagementService.findByEmailAndPassword(loginVO.getEmail(),
-          loginVO.getPassword());
+        RoleEntity roleEntity = new RoleEntity();
+        roleEntity.setId(RoleEnum.SUBSCRIBER.getId());
+        List<RoleEntity> roleEntityList = new ArrayList<>();
+        roleEntityList.add(roleEntity);
+        userEntity.setRoleList(roleEntityList);
 
-      SessionEntity sessionEntity = new SessionEntity();
-      sessionEntity.setUserId(userEntity.getId());
-      sessionEntity.setLogin(Instant.now());
-      this.sessionService.save(sessionEntity);
+        this.userManagementService.createUser(userEntity);
+      }
 
+      // get token
       TokenVO tokenVO = new TokenVO();
-      tokenVO.setToken(userEntity.getUuid());
+      tokenVO.setToken(this.jwtTokenUtil.generateToken(userEntity.getUsername()));
       return tokenVO;
+    } catch (ResponseStatusException e) {
+      throw e;
     } catch (Exception e) {
+      e.printStackTrace();
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  @PostMapping("/logout")
-  public void logout(@RequestAttribute("userEntity") UserEntity userEntity) {
-    try {
-      SessionEntity sessionEntity = this.sessionService.findFirstByUuiIdOrderByIdDesc(
-          userEntity.getUuid());
-      sessionEntity.setLogout(Instant.now());
-      this.sessionService.save(sessionEntity);
-    } catch (Exception e) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

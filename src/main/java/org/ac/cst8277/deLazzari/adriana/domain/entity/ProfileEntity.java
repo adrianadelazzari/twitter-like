@@ -13,8 +13,8 @@ public class ProfileEntity {
   @Id
   @Column(name = "user_id")
   private Integer userId;
-
   private String location;
   private Date dateOfBirth;
   private String name;
+  private String email;
 }
